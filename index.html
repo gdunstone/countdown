@@ -77,7 +77,9 @@
       </div>
        <div hidden="true" class="d-grid gap-2 d-sm-flex justify-content-sm-center" style="display: none !important;" id="countdown">
         <ul>
-          <li><span id="days"></span>days</li>
+          <li id="yearsLi" class="d-none"><span id="years"></span>years</li>
+          <li id="monthsLi" class="d-none"><span id="months"></span>months</li>
+          <li id="daysLi" class="d-none"><span id="days"></span>days</li>
           <li><span id="hours"></span>Hours</li>
           <li><span id="minutes"></span>Minutes</li>
           <li><span id="seconds"></span>Seconds</li>
@@ -87,93 +89,117 @@
   </div>
 </main>
 
-
   <script src="assets/dist/js/bootstrap.bundle.min.js"></script>
   <script src="assets/dist/js/moment-with-locales.min.js"></script>
   <script src="assets/dist/js/moment-timezone-with-data-1970-2030.js"></script>
 
-    <script type="text/javascript">
+  <script type="text/javascript">
 
-      // get some elements to get info from
-      let countDownDateEle = document.getElementById('cdDate')
-      let countDownTimeEle = document.getElementById('cdTime')
-      let countDownTZEle = document.getElementById('cdTZ')
+    // get some elements to get info from
+    let countDownDateEle = document.getElementById('cdDate')
+    let countDownTimeEle = document.getElementById('cdTime')
+    let countDownTZEle = document.getElementById('cdTZ')
 
-      // these are our elements to change
-      let countDownEle = document.getElementById('countdown')
-      let daysE = document.getElementById('days')
-      let hoursE = document.getElementById('hours')
-      let minutesE = document.getElementById('minutes')
-      let secondsE = document.getElementById('seconds')
+    // these are our elements to change
+    let countDownEle = document.getElementById('countdown')
 
-      moment.tz.names().forEach((name)=>{
-        let e = document.createElement("option")
-        e.innerText = name
-        countDownTZEle.appendChild(e)
-      })
+    let yearsLi = document.getElementById('yearsLi')
+    let monthsLi = document.getElementById('monthsLi')
+    let daysLi = document.getElementById('daysLi')
 
-      setInterval(()=>{
-        // get values from elements
-        let d = countDownDateEle.value
-        let t = countDownTimeEle.value
-        let z = countDownTZEle.value
-        // make sure to calculate moment with tz
-        let ct = moment.tz(`${d}T${t}`, z)
-        // moment should be in current tz
-        let diff = moment.duration(moment().diff(ct)*-1)
-        if (!diff.isValid()){
-          countDownEle.style.display = "none;"
-          return
-        }
-        // set values
-        daysE.innerText = diff.days()
-        hoursE.innerText = diff.hours()
-        minutesE.innerText = diff.minutes()
-        secondsE.innerText = diff.seconds()
-        countDownEle.style.display = "block"
-      }, 1000)
+    let yearsE = document.getElementById('years')
+    let monthsE = document.getElementById('months')
+    let daysE = document.getElementById('days')
+    let hoursE = document.getElementById('hours')
+    let minutesE = document.getElementById('minutes')
+    let secondsE = document.getElementById('seconds')
 
-      // handle clipboard button
-      document.getElementById('copy-to-clipboard').addEventListener('click', (e)=>{
-        // get the current url and replace the params
-        let url = new URL(window.location.href)
-        let queryString = window.location.search;
-        let urlParams = new URLSearchParams(queryString);
-        urlParams.set('d', countDownDateEle.value)
-        urlParams.set('t', countDownTimeEle.value)
-        urlParams.set('z', countDownTZEle.value)
-        // decode them because all modern browsers should support transparent encoding
-        url.search = decodeURIComponent(urlParams.toString())
-        navigator.clipboard.writeText(url.toString()).then(function() {
-          console.log("Copied url to clipboard!")
-          // do some feedback class swapping
-          let element = document.getElementById('copy-to-clipboard')
-          element.classList.remove("btn-primary");
-          element.classList.add("btn-disabled");
-          setTimeout(()=>{
-            element.classList.add("btn-primary");
-            element.classList.remove("btn-disabled");
-          }, 1200)
-        }, function(err) {
-          // if we fail just set the loc to the url, if their browser doesnt support they 
-          // can copy from the adddress bar
-          window.location = url.toString()
-        });
-      })
+    moment.tz.names().forEach((name)=>{
+      let e = document.createElement("option")
+      e.innerText = name
+      countDownTZEle.appendChild(e)
+    })
 
-      // load query params
+    setInterval(()=>{
+      // get values from elements
+      let d = countDownDateEle.value
+      let t = countDownTimeEle.value
+      let z = countDownTZEle.value
+      // make sure to calculate moment with tz
+      let ct = moment.tz(`${d}T${t}`, z)
+      // moment should be in current tz
+      let diff = moment.duration(moment().diff(ct)*-1)
+      if (!diff.isValid()){
+        countDownEle.style.display = "none;"
+        return
+      }
+      // set values
+
+      yearsE.innerText = diff.years()
+      monthsE.innerText = diff.months()
+      daysE.innerText = diff.days()
+      hoursE.innerText = diff.hours()
+      minutesE.innerText = diff.minutes()
+      secondsE.innerText = diff.seconds()
+      
+      // update elements
+      if( diff.years() > 0 )
+        yearsLi.classList.remove("d-none")
+      else
+        yearsLi.classList.add("d-none")
+      if( diff.months() > 0 )
+        monthsLi.classList.remove("d-none")
+      else
+        monthsLi.classList.add("d-none")
+      if( diff.days() > 0 )
+        daysLi.classList.remove("d-none")
+      else
+        daysLi.classList.add("d-none")
+
+      countDownEle.style.display = "block"
+    }, 1000)
+
+    // handle clipboard button
+    document.getElementById('copy-to-clipboard').addEventListener('click', (e)=>{
+      // get the current url and replace the params
+      let url = new URL(window.location.href)
       let queryString = window.location.search;
       let urlParams = new URLSearchParams(queryString);
-      // date
-      if (urlParams.has("d")) 
-        countDownDateEle.value = urlParams.get("d")
-      // time
-      if (urlParams.has("t")) 
-        countDownTimeEle.value = urlParams.get("t")
-      // timzone
-      if (urlParams.has("z")) 
-        countDownTZEle.value = urlParams.get("z")
+      urlParams.set('d', countDownDateEle.value)
+      urlParams.set('t', countDownTimeEle.value)
+      urlParams.set('z', countDownTZEle.value)
+      // decode them because all modern browsers should support transparent encoding
+      url.search = decodeURIComponent(urlParams.toString())
+      navigator.clipboard.writeText(url.toString()).then(function() {
+        console.log("Copied url to clipboard!")
+        // do some feedback class swapping
+        let element = document.getElementById('copy-to-clipboard')
+        element.classList.remove("btn-primary");
+        element.classList.add("btn-disabled");
+        setTimeout(()=>{
+          element.classList.add("btn-primary");
+          element.classList.remove("btn-disabled");
+        }, 1200)
+      }, function(err) {
+        // if we fail just set the loc to the url, if their browser doesnt support they 
+        // can copy from the adddress bar
+        window.location = url.toString()
+      });
+    })
 
-    </script>
+    // load query params
+    let queryString = window.location.search;
+    let urlParams = new URLSearchParams(queryString);
+    // date
+    if (urlParams.has("d")) 
+      countDownDateEle.value = urlParams.get("d")
+    // time
+    if (urlParams.has("t")) 
+      countDownTimeEle.value = urlParams.get("t")
+    // timzone
+    if (urlParams.has("z")) 
+      countDownTZEle.value = urlParams.get("z")
+
+  </script>
   </body>
 </html>
