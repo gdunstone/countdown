@@ -55,23 +55,25 @@
           <div class="input-group-prepend">
             <span class="input-group-text">date</span>
           </div>
-          <input id="cdDate" class="form-control" type="date" />
+          <input id="cdDate" class="form-control" type="date" title="Date" />
         </div>
         <div class="input-group">
           <div class="input-group-prepend">
             <span class="input-group-text">time</span>
           </div>
-        <input id="cdTime" class="form-control" type="time" value="00:00:00" />
+        <input id="cdTime" class="form-control" type="time" value="00:00:00" title="Time" />
         </div>
 
         <div class="input-group">
           <div class="input-group-prepend">
             <span class="input-group-text">timezone</span>
           </div>
-          <select id="cdTZ" class="form-control">
+          <select id="cdTZ" class="form-control" title="Timezone">
           </select>
         </div>
-        <button id="copy-to-clipboard" type="button" class="btn btn-primary"><img src="assets/img/copy.svg" /></button>
+        <button id="copy-to-clipboard" type="button" class="btn btn-primary" title="Copy settings to clipboard">
+          <img src="assets/img/copy.svg" />
+        </button>
       </div>
        <div hidden="true" class="d-grid gap-2 d-sm-flex justify-content-sm-center" style="display: none !important;" id="countdown">
         <ul>
@@ -82,7 +84,6 @@
         </ul>
       </div>
     </div>
-    <div id="clippymcguffin" style="display:none !important;"></div>
   </div>
 </main>
 
@@ -92,7 +93,7 @@
   <script src="assets/dist/js/moment-timezone-with-data-1970-2030.js"></script>
 
     <script type="text/javascript">
-      
+
       // get some elements to get info from
       let countDownDateEle = document.getElementById('cdDate')
       let countDownTimeEle = document.getElementById('cdTime')
