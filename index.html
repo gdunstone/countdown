@@ -36,7 +36,6 @@
         }
       }
     </style>
-
     
   </head>
   <body>
@@ -64,11 +63,13 @@
           </div>
         <input id="cdTime" class="form-control" type="time" value="00:00:00" />
         </div>
+
         <div class="input-group">
           <div class="input-group-prepend">
             <span class="input-group-text">timezone</span>
           </div>
-          <input id="cdTZ" class="form-control" type="timezone" />
+          <select id="cdTZ" class="form-control">
+          </select>
         </div>
         <button id="copy-to-clipboard" type="button" class="btn btn-primary"><img src="assets/img/copy.svg" /></button>
       </div>
@@ -103,6 +104,12 @@
       let hoursE = document.getElementById('hours')
       let minutesE = document.getElementById('minutes')
       let secondsE = document.getElementById('seconds')
+
+      moment.tz.names().forEach((name)=>{
+        let e = document.createElement("option")
+        e.innerText = name
+        countDownTZEle.appendChild(e)
+      })
 
       setInterval(()=>{
         // get values from elements
