@@ -159,6 +159,9 @@
         daysLi.classList.add("d-none")
 
       countDownEle.style.display = "block"
+
+      if(diff.years() == 0 && diff.months() == 0 && diff.days() == 0 && diff.hours() == 0 && diff.minutes() == 0 && diff.seconds() == 0)
+        window.location = "https://youtu.be/LDU_Txk06tM?t=58"
     }, 1000)
 
     // handle clipboard button
@@ -207,7 +210,6 @@
       document.getElementById('message').innerText = urlParams.get("msg")
       document.getElementById('settings').classList.add("d-none")
     }
-
 
   </script>
   </body>
