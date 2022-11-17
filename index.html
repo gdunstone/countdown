@@ -45,8 +45,9 @@
 
   <div class="px-4 py-5 my-5 text-center">
     <img class="d-block mx-auto mb-4" src="assets/img/stopwatch.svg" alt="" width="72" height="57">
-    <h1 class="display-5 fw-bold">Countdown</h1>
+    <h1 class="display-5 fw-bold" id="message">Countdown</h1>
     <div class="col-lg-6 mx-auto">
+      <div id="settings">
       <p class="lead mb-4">
         Enter your desired date to count down to:
       </p>
@@ -75,6 +76,7 @@
           <img src="assets/img/copy.svg" />
         </button>
       </div>
+      </div>
        <div hidden="true" class="d-grid gap-2 d-sm-flex justify-content-sm-center" style="display: none !important;" id="countdown">
         <ul>
           <li id="yearsLi" class="d-none"><span id="years"></span>years</li>
@@ -99,7 +101,7 @@
     let countDownDateEle = document.getElementById('cdDate')
     let countDownTimeEle = document.getElementById('cdTime')
     let countDownTZEle = document.getElementById('cdTZ')
-
+    
     // these are our elements to change
     let countDownEle = document.getElementById('countdown')
 
@@ -199,6 +201,13 @@
     // timzone
     if (urlParams.has("z")) 
       countDownTZEle.value = urlParams.get("z")
+
+    // message
+    if (urlParams.has("msg")){
+      document.getElementById('message').innerText = urlParams.get("msg")
+      document.getElementById('settings').classList.add("d-none")
+    }
+
 
   </script>
   </body>
